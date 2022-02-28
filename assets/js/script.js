@@ -1,5 +1,6 @@
-var questions = [{question: "Commonly used data types DO NOT include:",answerA: "A: strings", answerB: "B: booleans",answerC: "C: alerts", answerD: "D: numbers"}]
+var questions = [{question: "Commonly used data types DO NOT include:",answerA: "A: strings", answerB: "B: booleans",answerC: "C: alerts", answerD: "D: numbers",correctAnswer: "C"}]
 var questionNumber = 0
+currentQuestion = questions[questionNumber]
 var startPage = function() {
    document.body.innerHTML = '<header>\
        <button type="button" class="btn" id="highscoresButton">Highscores</button>\
@@ -21,12 +22,13 @@ var generateQuiz = function() {
     nextQuestion()
 }
 var nextQuestion = function() {
+ currentQuestion = questions[questionNumber]
 // if (questionNumber<(questions.length-1)) {
-    document.querySelector("#question").textContent = questions[questionNumber].question
-    document.querySelector("#answer-A").textContent = questions[questionNumber].answerA
-    document.querySelector("#answer-B").textContent = questions[questionNumber].answerB
-    document.querySelector("#answer-C").textContent = questions[questionNumber].answerC
-    document.querySelector("#answer-D").textContent = questions[questionNumber].answerD
+    document.querySelector("#question").textContent = currentQuestion.question
+    document.querySelector("#answer-A").textContent = currentQuestion.answerA
+    document.querySelector("#answer-B").textContent = currentQuestion.answerB
+    document.querySelector("#answer-C").textContent = currentQuestion.answerC
+    document.querySelector("#answer-D").textContent = currentQuestion.answerD
 // }
 
 }
@@ -35,8 +37,30 @@ var targetEl = event.target;
 if (targetEl.matches("#startButton")) {
     generateQuiz();
 }
-
+if (targetEl.matches("#answer-A")) {
+    checkAnswer("A")
 }
+if (targetEl.matches("#answer-B")) {
+    checkAnswer("B")
+}
+if (targetEl.matches("#answer-C")) {
+    checkAnswer("C")
+}
+if (targetEl.matches("#answer-D")) {
+    checkAnswer("D")
+}
+}
+var checkAnswer = function(answer) {
+if (currentQuestion.correctAnswer===answer) {
+    alert("Correct!")
+}
+    else {
+        alert("Incorrect!")
+    }
+}
+
+
+
 var header = document.querySelector("header");
 var main = document.querySelector("main")
 main.addEventListener("click",buttonHandler)
