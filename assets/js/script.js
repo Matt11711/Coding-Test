@@ -1,7 +1,8 @@
-var questions = [{question: "Commonly used data types DO NOT include:",answerA: "A: strings", answerB: "B: booleans",answerC: "C: alerts", answerD: "D: numbers",correctAnswer: "C"}]
+var questions = [{question: "Commonly used data types DO NOT include:",answerA: "A: strings", answerB: "B: booleans",answerC: "C: alerts", answerD: "D: numbers",correctAnswer: "C"}, {question:"dsdas"}]
 var questionNumber = 0
 currentQuestion = questions[questionNumber]
 var startPage = function() {
+    questionNumber=0
    document.body.innerHTML = '<header>\
        <button type="button" class="btn" id="highscoresButton">Highscores</button>\
        <p>TimerHere</p>\
@@ -19,17 +20,17 @@ var generateQuiz = function() {
     <button type="button" class="btn" id="answer-B">Answer Here</button>\
     <button type="button" class="btn" id="answer-C">Answer Here</button>\
     <button type="button" class="btn" id="answer-D">Answer Here</button>';
-    nextQuestion()
+    generateQuestion()
 }
-var nextQuestion = function() {
+var generateQuestion = function() {
  currentQuestion = questions[questionNumber]
-// if (questionNumber<(questions.length-1)) {
+
     document.querySelector("#question").textContent = currentQuestion.question
     document.querySelector("#answer-A").textContent = currentQuestion.answerA
     document.querySelector("#answer-B").textContent = currentQuestion.answerB
     document.querySelector("#answer-C").textContent = currentQuestion.answerC
     document.querySelector("#answer-D").textContent = currentQuestion.answerD
-// }
+
 
 }
 var buttonHandler = function(event) {
@@ -53,12 +54,19 @@ if (targetEl.matches("#answer-D")) {
 var checkAnswer = function(answer) {
 if (currentQuestion.correctAnswer===answer) {
     alert("Correct!")
+    nextQuestion()
 }
     else {
         alert("Incorrect!")
+        nextQuestion();
     }
 }
-
+var nextQuestion = function() {
+ if (questionNumber<(questions.length-1)) {
+     questionNumber++;
+     generateQuestion()
+}
+}
 
 
 var header = document.querySelector("header");
