@@ -48,6 +48,7 @@ var currentQuestion = questions[questionNumber];
 var timerValue = 75
 var body= document.body
 var timer
+highscores = [{score: 13},{score: 9},{score: 60},{score: 3}]
 //  sets up the start page HTML
 var startPage = function () {
   questionNumber = 0;
@@ -140,6 +141,8 @@ var checkAnswer = function (answer) {
     nextQuestion();
   }
 };
+
+//  if this isn't the last question, run the next question, otherwise end the quiz
 var nextQuestion = function () {
   if (questionNumber < questions.length - 1) {
     questionNumber++;
@@ -150,6 +153,8 @@ var nextQuestion = function () {
       finalPage()
   }
 };
+
+// shows final score and creates form to submit your score
 var finalPage = function() {
     timerValue = Math.max(timerValue,0)
     main.innerHTML='<h1>All Done!</h1>\
@@ -160,6 +165,46 @@ var finalPage = function() {
         <button type="submit" id="submitInitialsButton" class="btn">Submit</button>\
       </form>'
 }
+
+//  submits highscore if you put in your initials
+var initialsSubmit = function(event) {
+    event.preventDefault();
+    var initialsInput = document.querySelector("input[name='initials']").value;
+    if (initialsInput.length ===3 ) {
+        saveHighscore();
+      }
+      else {
+          alert("Please input 3 initials");
+          return false;
+      }
+}
+
+var getHighscores = function() {
+var savedScores = JSON.parse(localStorage.getItem("highscores"))
+if (savedScores) {
+    highscores = savedScores
+}
+}
+
+var saveHighscore = function() {
+    var newScore = {initals: initialsInput.value, score: timerValue}
+ getHighscores()
+highscores.push(newScore)
+var compareScores = function(a, b) {
+    return b.score-a.score;
+  }
+highscores.sort(compareScores);
+localStorage.setItem("highscores", JSON.stringify(highscores));
+highscoresPage();
+}
+
+
+var highscoresPage = function() {
+
+}
+
+
 var header = document.querySelector("header");
 var main = document.querySelector("main");
 main.addEventListener("click", buttonHandler);
+main.addEventListener("submit",initialsSubmit)
