@@ -66,8 +66,7 @@ var startPage = function () {
 };
 
 //makes the start page when the page loads
-
-document.onload = startPage();
+startPage();
 
 //sets timer element to a variable to reduce DOM usage
 var timerEl = document.querySelector("#timerText")
