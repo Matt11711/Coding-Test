@@ -58,7 +58,7 @@ var startPage = function () {
    </header><main>\
            <h1>Coding Quiz Challenge</h1>\
            <p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your scores/time by ten seconds!</p>\
-           <button type="button" class="btn" id="startButton">Start Quiz</button>\
+           <button type="button" class="btn center" id="startButton">Start Quiz</button>\
        </main>\
        <footer></footer>\
        <script src="./assets/js/script.js"> </script>';
@@ -76,15 +76,16 @@ var timerEl = document.querySelector("#timerText")
 var generateQuiz = function () {
   main.innerHTML =
     '<h1 id="question">'+currentQuestion.question+'</h1>\
-    <button type="button" class="btn" id="answer-A">'+currentQuestion.answerA+'</button>\
-    <button type="button" class="btn" id="answer-B">'+currentQuestion.answerB+'</button>\
-    <button type="button" class="btn" id="answer-C">'+currentQuestion.answerC+'</button>\
-    <button type="button" class="btn" id="answer-D">'+currentQuestion.answerD+'</button>';
+    <button type="button" class="btn center" id="answer-A">'+currentQuestion.answerA+'</button>\
+    <button type="button" class="btn center" id="answer-B">'+currentQuestion.answerB+'</button>\
+    <button type="button" class="btn center" id="answer-C">'+currentQuestion.answerC+'</button>\
+    <button type="button" class="btn center" id="answer-D">'+currentQuestion.answerD+'</button>';
      timer = setInterval(function() {
   
         if (timerValue<=1) { 
             clearInterval(timer)
             timerValue--
+            timerEl.textContent = timerValue
             finalPage()
         }
         else {
@@ -125,12 +126,14 @@ var buttonHandler = function (event) {
   if (targetEl.matches("#answer-D")) {
     checkAnswer("D");
   }
+//   reloads page so that the functions use generated variables can know what they are referencing
   if (targetEl.matches("#goBack")) {
     location.reload();
   }
+//   deletes the highscores and updates the scoreslist
   if (targetEl.matches("#deleteScores")) {
       localStorage.setItem("highscores",null);
-      getHighscores();
+      highscores = []
       generateScoresList();
   }
   if (targetEl.matches("#highscoresButton")) {
@@ -142,10 +145,10 @@ var buttonHandler = function (event) {
 var checkAnswer = function (answer) {
     var footer = document.querySelector("footer")
   if (currentQuestion.correctAnswer === answer) {
-    footer.innerHTML='<h2 id=correct >Correct! <h2>'
+    footer.innerHTML='<h2 id=correct> Correct! <h2>'
     nextQuestion();
   } else {
-    footer.innerHTML='<h2 id=incorrect >Incorrect! <h2>'
+    footer.innerHTML='<h2 id=incorrect> Incorrect! <h2>'
     timerValue-=10
     timerEl.textContent=timerValue
     nextQuestion();
@@ -189,7 +192,7 @@ var initialsSubmit = function(event) {
           return false;
       }
 }
-
+// if there are highscroes saved, add them to the highscores variable, otherwise make it an empty array
 var getHighscores = function() {
 var savedScores = JSON.parse(localStorage.getItem("highscores"))
 if (savedScores) {
@@ -197,30 +200,35 @@ if (savedScores) {
 }
 else highscores = []
 }
-
+// make a new object for the current score, then add that to the array of highscores,order it, and save it
 var saveHighscore = function() {
     var newScore = {initals: initialsInput.value, score: timerValue}
   getHighscores()
 highscores.push(newScore)
+// sorts the scores in descending order
 var compareScores = function(a, b) {
     return b.score-a.score;
   }
 highscores.sort(compareScores);
+// only keeps first 10 elements of the array and saves those to local storage. then generates highscore page
+highscores = highscores.slice(0,10)
 localStorage.setItem("highscores", JSON.stringify(highscores));
 highscoresPage();
 }
 
-
+//  creates highscore page and runs function to populate scores
 var highscoresPage = function() {
 body.innerHTML = '<h1>Highscores</h1>\
+<div class = "scoreContainer" >\
 <ol class="scoresList"></ol>\
+</div>\
 <div>\
 <button type="button" class="btn" id="goBack">Go Back</button>\
 <button type="button" class="btn", id="deleteScores">Clear Scores</button>\
 </div>'
 generateScoresList();
 }
-
+//  if there are no scores, empty the list, otherwise add the scores in an ordered list
 var generateScoresList = function() {
     var scoresListEl = document.querySelector(".scoresList")
     if (!highscores.length) {
@@ -238,9 +246,11 @@ else {
     }
 }
 }
-
+// creats some variables to reduce dom usage
 var header = document.querySelector("header");
 var main = document.querySelector("main");
+
+// event listeners for the page
 document.onload = getHighscores()
 body.addEventListener("click", buttonHandler);
 main.addEventListener("submit",initialsSubmit)

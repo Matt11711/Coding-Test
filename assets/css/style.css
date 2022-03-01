@@ -1,24 +1,64 @@
-.btn {
-    background-color: blueviolet;
-    color: white;
-}
+/* centers base content */
 * {
     text-align: center;
+    
 }
+/* makes text elements stay closer to center */
+p {
+    width: 50%;
+    align-self: center;
+}
+
+body {
+    background-color: beige;
+}
+/* places my buttons in columns */
 main {
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
+/* separates my highscore and timer elements */
 header {
     display: flex;
     justify-content: space-between;
 }
-footer {
-    color: ;
+
+/* styles timer */
+#timerText {
+    font-size: 30pt;
+    color: yellowgreen
+    
 }
+/* colors the text whether it is incorrect or correct */
 #correct {
     color: green;
 }
 #incorrect {
     color: red;
+}
+/* styles highscore list */
+.scoresList {
+    background-color: aqua;
+    width: 200px;
+}
+/* centers highscore list */
+.scoreContainer {
+    display: flex;
+    justify-content: center;
+}
+/* centers some troublesome buttons */
+.center {
+    margin: auto;
+}
+/* styles buttons */
+.btn {
+    background-color: blueviolet;
+    color: white;
+    width: 200px;
+}
+/* fixes size of highscores button */
+#highscoresButton {
+    height: fit-content;
+    align-self: center;
 }
