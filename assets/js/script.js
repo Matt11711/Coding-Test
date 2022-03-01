@@ -46,12 +46,13 @@ var questions = [
 var questionNumber = 0;
 var currentQuestion = questions[questionNumber];
 var timerValue = 75
-
+var body= document.body
+var timer
 //  sets up the start page HTML
 var startPage = function () {
   questionNumber = 0;
   timerValue = 75
-  document.body.innerHTML =
+  body.innerHTML =
     '<header>\
        <button type="button" class="btn" id="highscoresButton">Highscores</button>\
        <p id="timerText">'+timerValue+'</p>\
@@ -60,6 +61,7 @@ var startPage = function () {
            <p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your scores/time by ten seconds!</p>\
            <button type="button" class="btn" id="startButton">Start Quiz</button>\
        </main>\
+       <footer></footer>\
        <script src="./assets/js/script.js"> </script>';
        
 };
@@ -70,14 +72,26 @@ document.onload = startPage();
 //sets timer element to a variable to reduce DOM usage
 var timerEl = document.querySelector("#timerText")
 
-// generates quiz with filler text, then calls function to make the questions
+// generates quiz with filler text, starts the timer, then calls function to make the questions
 var generateQuiz = function () {
-  document.querySelector("main").innerHTML =
+  main.innerHTML =
     '<h1 id="question">'+currentQuestion.question+'</h1>\
     <button type="button" class="btn" id="answer-A">'+currentQuestion.answerA+'</button>\
     <button type="button" class="btn" id="answer-B">'+currentQuestion.answerB+'</button>\
     <button type="button" class="btn" id="answer-C">'+currentQuestion.answerC+'</button>\
     <button type="button" class="btn" id="answer-D">'+currentQuestion.answerD+'</button>';
+     timer = setInterval(function() {
+  
+        if (timerValue<=1) { 
+            clearInterval(timer)
+            timerValue--
+            finalPage()
+        }
+        else {
+            timerValue--;
+            timerEl.textContent = timerValue
+        }
+        },1000)
   generateQuestion();
 };
 
@@ -90,18 +104,10 @@ var generateQuestion = function () {
   document.querySelector("#answer-B").textContent = currentQuestion.answerB;
   document.querySelector("#answer-C").textContent = currentQuestion.answerC;
   document.querySelector("#answer-D").textContent = currentQuestion.answerD;
-  var timer = setInterval(function() {
-  
-    if (timerValue<=1) { 
-        clearInterval(timer)
-        finalPage()
-    }
-    else {
-        timerValue--;
-        timerEl.textContent = timerValue
-    }
-    },1000)
+ 
 };
+
+// general button handler function that calls various functions depending on which button was pressed.
 var buttonHandler = function (event) {
   var targetEl = event.target;
   if (targetEl.matches("#startButton")) {
@@ -120,12 +126,17 @@ var buttonHandler = function (event) {
     checkAnswer("D");
   }
 };
+
+// checks for correct answer and displays that, while also updating timer if necessary.
 var checkAnswer = function (answer) {
+    var footer = document.querySelector("footer")
   if (currentQuestion.correctAnswer === answer) {
-    alert("Correct!");
+    footer.innerHTML="Correct!"
     nextQuestion();
   } else {
-    alert("Incorrect!");
+    footer.innerHTML="Incorrect!"
+    timerValue-=10
+    timerEl.textContent=timerValue
     nextQuestion();
   }
 };
@@ -140,8 +151,9 @@ var nextQuestion = function () {
   }
 };
 var finalPage = function() {
-    document.body.innerHTML='<h1>All Done!</h1>\
-    <p> Your final score is'+timerValue+'</p>\
+    timerValue = Math.max(timerValue,0)
+    main.innerHTML='<h1>All Done!</h1>\
+    <p> Your final score is '+ timerValue+'</p>\
     <form id="initials-form">\
       <label for="initialsInput">Enter initials:</label>\
         <input type="text" name="initials" id="initialsInput">\
