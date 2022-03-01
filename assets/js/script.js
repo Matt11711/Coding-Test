@@ -48,7 +48,7 @@ var currentQuestion = questions[questionNumber];
 var timerValue = 75
 var body= document.body
 var timer
-highscores = [{score: 13},{score: 9},{score: 60},{score: 3}]
+highscores = []
 //  sets up the start page HTML
 var startPage = function () {
   questionNumber = 0;
@@ -200,7 +200,20 @@ highscoresPage();
 
 
 var highscoresPage = function() {
+body.innerHTML = '<h1>Highscores</h1>\
+<ol class="scoresList"></ol>\
+<div>\
+<button type="button" class="btn" id="goBack">Go Back</button>\
+<button type="button" class="btn", id="deleteScores">Clear Scores</button>\
+</div>'
+var scoresListEl = document.querySelector(".scoresList")
+for (i=0; i<highscores.length; i++) {
+    var highscoreEl = document.createElement("li");
+    highscoreEl.className = "highscore-item"
+    highscoreEl.textContent = highscores[i].initals + "-" + highscores[i].score
 
+    scoresListEl.appendChild(highscoreEl);
+}
 }
 
 
