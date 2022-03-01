@@ -1,15 +1,15 @@
-# Coding Test
+# Portfolio
 ![Screenshot](./assets/images/screenshot.PNG)
 
 ## Purpose
-Generate password of variable length that contains random characters of user selected types.
+Allow user to take a dynamically generated quiz and receive a score based on how well/quickly the complete it.
 
 ## Features
-* Generate Password Button to get a password
-* Series of prompts to determine desired password length and which types of characters should be in the password, chosen from lowercase letters, uppercase letters, numbers, and special symbols
-* Password should have roughly equal amounts of each selected character type
-* Password length can be from 8 to 128 characters long, and invalid inputs will prompt you again for a valid input
-* Most repeated sections of code have been split into their own functions to improve readability and line count
+* timer that counts down once you start the quiz
+* text indication of whether your selected answer is correct or incorrect
+* timer is decreased when you give an incorrect answer
+* on quiz completion or when you run out of time, brings you to a submit score screen
+* submitting score saves it to localstorage if it was in the top 10 scores, then shows the highscores
 
 ## Built with
 * HTML
@@ -17,7 +17,7 @@ Generate password of variable length that contains random characters of user sel
 * JavaScript
 
 ## Website 
-https://matt11711.github.io/passwordGenerator/
+https://matt11711.github.io/Coding-Test/
 
 ## Contribution
 Made with ❤️ by Matt11711
