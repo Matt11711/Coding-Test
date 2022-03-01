@@ -51,8 +51,6 @@ var timer
 highscores = []
 //  sets up the start page HTML
 var startPage = function () {
-  questionNumber = 0;
-  timerValue = 75
   body.innerHTML =
     '<header>\
        <button type="button" class="btn" id="highscoresButton">Highscores</button>\
@@ -68,6 +66,7 @@ var startPage = function () {
 };
 
 //makes the start page when the page loads
+
 document.onload = startPage();
 
 //sets timer element to a variable to reduce DOM usage
@@ -126,16 +125,27 @@ var buttonHandler = function (event) {
   if (targetEl.matches("#answer-D")) {
     checkAnswer("D");
   }
+  if (targetEl.matches("#goBack")) {
+    location.reload();
+  }
+  if (targetEl.matches("#deleteScores")) {
+      localStorage.setItem("highscores",null);
+      getHighscores();
+      generateScoresList();
+  }
+  if (targetEl.matches("#highscoresButton")) {
+      highscoresPage();
+  }
 };
 
 // checks for correct answer and displays that, while also updating timer if necessary.
 var checkAnswer = function (answer) {
     var footer = document.querySelector("footer")
   if (currentQuestion.correctAnswer === answer) {
-    footer.innerHTML="Correct!"
+    footer.innerHTML='<h2 id=correct >Correct! <h2>'
     nextQuestion();
   } else {
-    footer.innerHTML="Incorrect!"
+    footer.innerHTML='<h2 id=incorrect >Incorrect! <h2>'
     timerValue-=10
     timerEl.textContent=timerValue
     nextQuestion();
@@ -163,7 +173,8 @@ var finalPage = function() {
       <label for="initialsInput">Enter initials:</label>\
         <input type="text" name="initials" id="initialsInput">\
         <button type="submit" id="submitInitialsButton" class="btn">Submit</button>\
-      </form>'
+      </form>\
+      <script src="./assets/js/script.js"> </script>';
 }
 
 //  submits highscore if you put in your initials
@@ -184,11 +195,12 @@ var savedScores = JSON.parse(localStorage.getItem("highscores"))
 if (savedScores) {
     highscores = savedScores
 }
+else highscores = []
 }
 
 var saveHighscore = function() {
     var newScore = {initals: initialsInput.value, score: timerValue}
- getHighscores()
+  getHighscores()
 highscores.push(newScore)
 var compareScores = function(a, b) {
     return b.score-a.score;
@@ -206,18 +218,29 @@ body.innerHTML = '<h1>Highscores</h1>\
 <button type="button" class="btn" id="goBack">Go Back</button>\
 <button type="button" class="btn", id="deleteScores">Clear Scores</button>\
 </div>'
-var scoresListEl = document.querySelector(".scoresList")
-for (i=0; i<highscores.length; i++) {
-    var highscoreEl = document.createElement("li");
-    highscoreEl.className = "highscore-item"
-    highscoreEl.textContent = highscores[i].initals + "-" + highscores[i].score
-
-    scoresListEl.appendChild(highscoreEl);
-}
+generateScoresList();
 }
 
+var generateScoresList = function() {
+    var scoresListEl = document.querySelector(".scoresList")
+    if (!highscores.length) {
+        scoresListEl.innerHTML = "" }
+
+
+else {
+    
+    for (i=0; i<highscores.length; i++) {
+        var highscoreEl = document.createElement("li");
+        highscoreEl.className = "highscore-item"
+        highscoreEl.textContent = highscores[i].initals + "-" + highscores[i].score
+    
+        scoresListEl.appendChild(highscoreEl);
+    }
+}
+}
 
 var header = document.querySelector("header");
 var main = document.querySelector("main");
-main.addEventListener("click", buttonHandler);
+document.onload = getHighscores()
+body.addEventListener("click", buttonHandler);
 main.addEventListener("submit",initialsSubmit)
